@@ -1,15 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kafka-deployment-1
-  namespace: kafka-cluster
+  name: kafka-broker-1
+  namespace: default
 spec:
-  serviceName: kafka1
+  # serviceName: kafka1
   replicas: 1
   selector:
     matchLabels:
       name: kafka-broker-1
   template:
+    metadata:
+      labels:
+        app: kafka-broker-1
     spec:
       nodeSelector:
         servertype: analytics
@@ -42,15 +45,15 @@ spec:
           value: "5555"
         - name: KAFKA_CLEANUP_POLICY
           value: "compact"
-        volumeMounts:
-          - name: xr-volume
-            mountPath: "/kafka/kafka-logs"
+        # volumeMounts:
+        #   - name: xr-volume
+        #     mountPath: "/kafka/kafka-logs"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: kafka1
-  namespace: kafka-cluster
+  name: kafka-broker-1
+  namespace: default
   labels:
     app: kafka-broker-1
 spec:
